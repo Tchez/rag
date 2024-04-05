@@ -28,8 +28,14 @@ async def load_files(
                 detail='Erro ao carregar arquivos: não foi possível conectar ao banco de dados',
             )
 
-        print(index.describe_index_stats())
-        breakpoint()
+        print(index.describe_index_stats()) # TODO: remover
+        
+        if not files:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail='Erro ao carregar arquivos: nenhum arquivo foi enviado',
+            )
+        
         files = [await file.read() for file in files]
         embedding = to_embedding(files)
 
